@@ -1,4 +1,9 @@
-﻿using System.Collections;
+﻿/* Anthony Wessel
+ * Assignment 8 Challenge 5
+ * Controls the game state and UI
+ */
+
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
@@ -21,16 +26,26 @@ public class GameManagerX : MonoBehaviour
     private float spaceBetweenSquares = 2.5f; 
     private float minValueX = -3.75f; //  x value of the center of the left-most square
     private float minValueY = -3.75f; //  y value of the center of the bottom-most square
-    
-    // Start the game, remove title screen, reset score, and adjust spawnRate based on difficulty button clicked
-    public void StartGame()
+
+    float timeRemaining;
+    public TextMeshProUGUI timeText;
+
+    private void Start()
     {
-        spawnRate /= 5;
+        isGameActive = false;
+    }
+
+    // Start the game, remove title screen, reset score, and adjust spawnRate based on difficulty button clicked
+    public void StartGame(int difficulty)
+    {
+        spawnRate /= difficulty;
         isGameActive = true;
         StartCoroutine(SpawnTarget());
         score = 0;
         UpdateScore(0);
         titleScreen.SetActive(false);
+
+        timeRemaining = 60;
     }
 
     // While game is active spawn a random target
@@ -70,14 +85,14 @@ public class GameManagerX : MonoBehaviour
     public void UpdateScore(int scoreToAdd)
     {
         score += scoreToAdd;
-        scoreText.text = "score";
+        scoreText.text = "Score: " + score;
     }
 
     // Stop game, bring up game over text and restart button
     public void GameOver()
     {
         gameOverText.gameObject.SetActive(true);
-        restartButton.gameObject.SetActive(false);
+        restartButton.gameObject.SetActive(true);
         isGameActive = false;
     }
 
@@ -87,4 +102,16 @@ public class GameManagerX : MonoBehaviour
         SceneManager.LoadScene(SceneManager.GetActiveScene().name);
     }
 
+    void Update()
+    {
+        if (!isGameActive) return;
+
+        timeRemaining -= Time.deltaTime;
+        timeText.text = "Time: " + Mathf.Round(timeRemaining);
+
+        if (timeRemaining <= 0)
+        {
+            GameOver();
+        }
+    }
 }

@@ -1,5 +1,8 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿/* Anthony Wessel
+ * Assignment 8 Challenge 5
+ * Starts the game at a specific difficulty
+ */
+
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -23,7 +26,7 @@ public class DifficultyButtonX : MonoBehaviour
     void SetDifficulty()
     {
         Debug.Log(button.gameObject.name + " was clicked");
-        gameManagerX.StartGame();
+        gameManagerX.StartGame(difficulty);
     }
 
 
